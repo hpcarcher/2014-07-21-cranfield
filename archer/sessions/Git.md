@@ -371,7 +371,7 @@ Delete branch, once merged changes in:
 
     git branch -D servings
 
-Review using [Images of the key steps in this section](GitBranching.md)
+Review using [Images of the key steps in this section](GitBranches.md)
 
 DropBox and GoogleDrive don't support this ability.
 
