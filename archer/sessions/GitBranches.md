@@ -54,6 +54,12 @@ Merges
 
 `git checkout master` to switch to `master`:
 
+    -c1---c2---c3---c7---c8                     master *
+                \
+                 c4---c5---c6---c9              servings
+
+Commit changes on `master`:
+
     -c1---c2---c3---c7---c8---c10               master *
                 \
                  c4---c5---c6---c9              servings
@@ -146,7 +152,9 @@ A popular model:
 
 * Release branch - a released version of the code.
 * Master branch - most up-to-date stable version of the code.
-* Feature and/or developer-specific branches representing work-in-progress, new features etc.
+* Feature, bug and/or developer-specific branches.
+
+Example:
 
                0.1      0.2        0.3
               c6---------c9------c17------               release
