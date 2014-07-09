@@ -107,6 +107,15 @@ Makefile format:
  * Actions intented using TAB not 8 spaces.
  * Legacy of make's 1970's origins.
 
+Add this information as comments:
+
+    # Make comments
+    # target: dependency1 dependency1 dependency2 ...
+    # TAB rule1
+    # TAB rule2
+    # TAB rule3
+    # TAB ...
+
 Run:
 
     $ make
@@ -182,13 +191,18 @@ Rewrite action:
 
     tar -czf $@ war.dat jekyll.dat bridge.dat
 
-`$@` means 'the target of the current rule'. It is an 'automatic variable'.
+`$@` means 'the target of the current rule'. It is an 'automatic variable' or 'special macro'
+
+    # Make's special macros:
+    # $@ Target of the current rule.
 
 Rewrite action:
 
     tar -czf $@ $^
 
-`$^` means 'the dependencies of this rule'.
+`$^` is a special macro which means 'the dependencies of this rule'.
+
+    # $^ All dependencies of the current rule.
 
 Bash wild-card can be used in file names. Replace dependencies with:
 
@@ -244,7 +258,9 @@ Exercise 2 - simplify a rule
 
 See [exercises](MakeExercises.md).
 
-You will need an automatic variable `$<` which means 'use the first dependency only'.
+You will need another special macro, `$<` which means 'use the first dependency only'.
+
+    # $< First dependency of the current rule.
 
 Solution: 
 
