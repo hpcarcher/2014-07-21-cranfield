@@ -89,22 +89,22 @@ Do not mess around with these files as you could lose work!
 Add files and directories and recording changes
 -----------------------------------------------
 
-Write a recipe:
+Write a recipie:
 
-* Create a file `recipe.md`.
+* Create a file `recipie.md`.
 * [Markdown](http://daringfireball.net/projects/markdown/syntax) syntax.
 * Add Ingredients and Cooking Instructions.
 
 Current status of files in the repository:
 
-    git status recipe.md
+    git status recipie.md
 
 `Untracked` - files in working directory that Git is not managing.
 
 Add file to 'staging area' (AKA 'index' or 'cache'):
 
-    git add recipe.md
-    git status recipe.md
+    git add recipie.md
+    git status recipie.md
 
 `Changes to be committed` - content in the staging area, ready for Git to manage. Think of it as a loading dock.
 
@@ -119,7 +119,7 @@ Git can deduce what was changed and when, and, using the configuration, who by, 
 
 Git shows number of files changed and the number of lines inserted or deleted across all those files.
 
-    git status recipe.md
+    git status recipie.md
 
 `nothing to commit` - Git is managing everything in the working directory.
 
@@ -129,13 +129,13 @@ Git shows number of files changed and the number of lines inserted or deleted ac
 
     git log --relative-date
 
-Make updates to `recipe.md`.
+Make updates to `recipie.md`.
 
-    git status recipe.md
+    git status recipie.md
 
 `Changes not staged for commit` section and `modified` marker - file managed by Git has been modified and changes are not yet commited.
 
-    git add recipe.md
+    git add recipie.md
     git commit
 
 Good commits are atomic - they consist of the smallest change that remains meaningful. 
@@ -150,7 +150,7 @@ Create a directory:
     mkdir images
     cd images
 
-Download image of recipe from the web and put into `images` or use `wget`:
+Download image of recipie from the web and put into `images` or use `wget`:
 
     wget http://www.cookuk.co.uk/images/slow-cooker-winter-vegetable-soup/smooth-soup.jpg
 
@@ -159,13 +159,13 @@ Add directory to repository:
     git add images
     git commit -m "Added images directory and soup image" images
 
-Add link to recipe:
+Add link to recipie:
 
     [Soup](images/smooth-soup.jpg "My soup")
 
 Commit:
 
-    git commit -m "Added link to image of my soup." recipe.md
+    git commit -m "Added link to image of my soup." recipie.md
 
 What (not) to store in the repository:
 
@@ -178,9 +178,9 @@ What (not) to store in the repository:
 Discard changes
 ---------------
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `recipie.md`.
 
-    git diff recipe.md
+    git diff recipie.md
 
 * `-` - a line was deleted. 
 * `+` - a line was added. 
@@ -188,16 +188,16 @@ Make and commit changes to `recipe.md`.
 
 Throw away local changes and 'revert':
 
-    git checkout -- recipe.md
+    git checkout -- recipie.md
     git status data-report.md
 
 Look at history
 ---------------
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `recipie.md`.
 
     git log
-    git log recipe.md
+    git log recipie.md
     git diff COMMITID
     git diff OLDER_COMMITID NEWER_COMMITID
 
@@ -206,7 +206,7 @@ Rollback working directory to state of repository at first commit:
     git log
     git checkout COMMITID
     ls
-    cat recipe.md
+    cat recipie.md
 
 Return to current state:
 
@@ -236,7 +236,7 @@ Commit identifiers are cryptic and meaningless to humans.
     git tag BOOT_CAMP
     git tag
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `recipie.md`.
 
     git checkout BOOT_CAMP
     git checkout master
@@ -256,7 +256,7 @@ Tag naming, like variable, function, class and script names, should be:
 Branches
 --------
 
-    git status recipe.md
+    git status recipie.md
 
 What is `master`?
 
@@ -274,44 +274,68 @@ Question: why might this be useful?
 * Experiment with developing a new feature, or a refactoring, we're not sure we'll keep.
 * Simultaneously prepare a paper for submission and add a new section for a future submission.
 
+A useful command - pretty-print log:
+
+    git log --oneline --graph --decorate --all
+
+See branches:
+
     git branch
 
 `*` - current branch.
 
-Create a new branch:
+Create a new branch for serving suggestions:
 
-    git branch new_recipe_format
+    git branch servings
     git branch
-
-Switch to new branch:
-
-    git checkout new_recipe_format
+    git checkout servings
     git branch
 
 Two concurrent branches now exist and we can work on either.
 
-Make and commit changes to `recipe.md`.
-
-Switch between branches:
+Make and commit changes to the end of `recipie.md`.
 
     git checkout master
-    cat recipe.md
-    git checkout new_recipe_format
-    cat recipe.md
+    cat recipie.md
+
+Edit and commit existing lines of `recipie.md`.
+
+    git checkout servings
+    cat recipie.md
+
+Make and commit changes to the end of `recipie.md`.
+
     git checkout master
-    cat recipe.md
+    cat recipie.md
 
-Once happy with our new format, we can merge changes from `new_recipe_format` into `master`:
+Pretty-print log.
 
-    git merge new_recipe_format
+Once happy with our new format, we can merge changes from `servings` into `master`:
+
+    git merge servings
 
 Merging is done on a file-by-file basis, merging files line by line.
 
-Make and commit changes to `recipe.md`.
+A new commit is automatically created to represent the merge.
 
-    git checkout new_recipe_format
+    git log
+    git log --oneline --graph --decorate --all
 
-Make, commit and push changes to `recipe.md`, taking care to edit the same lines as above, but making different changes.
+What happens if we edit the same lines in both branches?
+
+    git checkout servings
+
+Make and commit changes to `recipie.md`.
+
+    git checkout master
+
+Make and commit changes to the same lines in `recipie.md`:
+
+    git log --oneline --graph --decorate --all
+
+Merge:
+
+    git merge servings
 
 `CONFLICT` - changes can't be seamlessly merged because changes have been made to the same set of lines in the same files.
 
@@ -319,7 +343,7 @@ Make, commit and push changes to `recipe.md`, taking care to edit the same lines
 
 `Unmerged` - files which have conflicts.
 
-    cat recipe.md
+    cat recipie.md
 
 Conflict markup:
 
@@ -335,77 +359,23 @@ Conflict resolution - edit file and do one of:
 
 Remove all the markup.
 
-    git add recipe.md
-    git commit -m "Resolved confict in recipe.md by ..."
+    git add recipie.md
+    git commit -m "Resolved confict in recipie.md by ..."
     git log
 
 `Merge branch` entry.
-
-Pretty-print history:
 
     git log --oneline --graph --decorate --all
 
 Delete branch, once merged changes in:
 
-    git branch -D new_recipe_format
+    git branch -D servings
+
+Review using [Images of the key steps in this section](GitBranching.md)
 
 DropBox and GoogleDrive don't support this ability.
 
 No work is ever lost.
-
-Branch images
--------------
-
-We create our branch for the new feature.
-
-    -c1---c2---c3                               master
-                \
-                 c4                             feature1
-
-We can then continue developing our software in our default, or master, branch,
-
-    -c1---c2---c3---c5---c6---c7                   master
-                \
-                 c4                                feature1
-
-And, we can work on the new feature in the feature1 branch
-
-    -c1---c2---c3---c5---c6---c7                   master
-                \
-                 c4---c8---c9                      feature1
-
-We can then merge the feature1 branch adding new feature to our master branch (main program):
-
-     -c1---c2---c3---c5---c6---c7--c10              master
-                \                   /
-                 c4---c8---c9------                 feature1
-
-When we merge our feature1 branch with master git creates a new commit which contains merged files from master and feature1. After the merge we can continue developing. The merged branch is not deleted. We can continue developing (and making commits) in feature1 as well.
-
-    -c1---c2---c3---c5---c6---c7--c10---c11--c12     master
-                \                /
-                 c4---c8---c9-------c13              feature1
-
-One popular model is to have,
-
-* A release branch, representing a released version of the code.
-* A master branch, representing the most up-to-date stable version of the code.
-* Various feature and/or developer-specific branches representing work-in-progress, new features etc.
-
-For example,
-
-               0.1      0.2        0.3
-              c6---------c9------c17------            release
-             /          /       /
-     c1---c2---c3--c7--c8---c16--c18---c20---c21--    master
-     |                      /
-     c4---c10---c13------c15                          fred
-     |                   /
-     c5---c11---c12---c14---c19                       kate
-
-There are different possible workflows when using Git for code development.
-
-One of the examples may be when the master branch holds stable and tested code. If a bug is found by a user, a bug fix can be applied to the release branch, and then merged with the master branch. When a feature or developer-specific branch, is stable and has been reviewed and tested it can be merged with the master branch. When the master branch has been reviewed and tested and is ready for release, a new release branch can be created from it.
 
 Summary
 -------
@@ -528,7 +498,7 @@ Answer: `cookerybook` was the directory that held our local repository but was n
 Push changes to remote repository
 ---------------------------------
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `recipie.md`.
 
     git push
 
@@ -550,7 +520,7 @@ Both Owner and partner clone the Owner's repository e.g.
   
     git clone https://USERNAME@bitbucket.org/USERNAME/cookbook.git 
 
-Owner make, commit and push changes to `recipe.md`.
+Owner make, commit and push changes to `recipie.md`.
 
 Pull changes from a remote repository
 -------------------------------------
@@ -565,18 +535,18 @@ Partner 'fetch' changes from remote repository:
 'Merge' changes into current repository, which merges the branches together:
 
     git merge origin/master
-    cat recipe.md
+    cat recipie.md
 
 Merging is done on a file-by-file basis, merging files line by line just as when we used branches locally.
 
-Partner make, commit and push changes to `recipe.md`.
+Partner make, commit and push changes to `recipie.md`.
 
 Owner 'fetch' changes from remote repository.
 
 Partner 'pull' changes from remote repository:
 
     git pull
-    cat recipe.md
+    cat recipie.md
     git log
 
 `pull` does a `fetch` and a `merge` in one go. 
