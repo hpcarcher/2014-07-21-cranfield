@@ -3,7 +3,7 @@ Automation and Make
 
 Question: what are the problems with this?
 
-    cc -o scheduler main.o schedule.o optimise.o io.o utils.o -I./include -L./lib -lm -lblas -llapack -lrng
+    cc -o scheduler main.o schedule.o optimise.o io.o utils.o -I./include -L./lib -lm -lblas -llapack -lrng
 
 Answer:
 
@@ -40,15 +40,8 @@ Automated build:
 
  * Input files => process => output files.
  * Source code => compiler => library or executable.
- * Configuration and data files => processor => data files.
-
-See [Not just for compiling code](MakeUses.jpg).
-
-Example:
-
-* Text files.
-* Python script to read text files output words and their frequencies.
-* It doesn't really matter which programs we are using, could be anything.
+ * Configuration and data files => analysis => data files.
+ * Data files => visualisation => images.
 
 A simple data processing pipeline
 ---------------------------------
@@ -79,6 +72,8 @@ Plot the word counts in a data file and save:
 
     $ python plotcount.py war.dat war.jpg
     $ python plotcount.py war.dat war.jpg 5
+
+It doesn't really matter which programs we are using, could be anything.
 
 A first makefile
 ----------------
