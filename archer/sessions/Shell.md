@@ -73,6 +73,7 @@ Everything inside backticks is executed before the current command. The output i
 
     $ FILES=`ls books/*.txt`  # FILES is a shell variable.
     $ echo $FILES
+    $ for FILE in $FILES; do echo $FILE; done
     $ HOST=`hostname`
     $ echo HOST
     $ WHEREIWAS=`pwd`
@@ -108,6 +109,34 @@ Pipe demonstrates principles of good programming practice:
 * `history` + `grep` = function to search for a command.
 * Applies to C functions and libraries, FORTRAN sub-routines and modules, Java packages, classes and methods, Python functions and classes etc.
 
+`tee` and `script`
+------------------
+
+Capture standard outpupt in the middle of a pipeline:
+
+    $ ls -l *.sh | tee log.txt
+    $ cat log.txt
+    $ history | tee raw.txt | grep "tar" | tee filtered.txt
+    $ ls -l *.sh | tee log.txt
+    $ ls -l *.py | tee -a log.txt # Append
+
+[How tee works](http://en.wikipedia.org/wiki/Tee_(command)#mediaviewer/File:Tee.svg)
+
+    $ ls *.txt 2>&1 | tee log.txt
+
+    $ script
+    $ ls -l
+    $ CTRL-D
+    $ cat typescript
+
+Record commands typed, commands with lots of outputs, trial-and-error when building software.
+
+Add to lab notebook.
+
+Send exact copy of command and error message to support or paste into a ticket.
+
+Rework into a blog or tutorial.
+
 Command history revisited
 -------------------------
 
@@ -140,6 +169,8 @@ These spawn a new shell, run the commands and shut down the new shell. This can 
     $ source variables.sh
     $ echo $EXAMPLE_DIR
 
+Beware if these have exit commands as your shell may unexpectedly or annoyingly shut down.
+
 Packaging
 ---------
 
@@ -165,7 +196,7 @@ List files that will be unpacked, without unpacking them:
     $ tar -tvf books.tar.gz  # lisT
     $ tar -xvf books.tar.gz  # eXtract
 
-For files online, file size and MD5 sum allow others to check the files have not been tampered with:
+For files online, file size and MD5 sum (hash or checksum that acts as a fingerprint), allow others to check the files have not been tampered with:
 
     $ ls -l books.tar.gz
     $ md5sum books.tar.gz  # MD5 checksum
@@ -190,36 +221,10 @@ Jobs
     $ CTRL-C
     $ jobs -l
     $ kill %2 # Kill job with given job number
-    $ kill %3
     $ jobs -l
-
-`tee` and `script`
-------------------
-
-Capture standard outpupt in the middle of a pipeline:
-
-    $ ls -l *.sh | tee log.txt
-    $ cat log.txt
-    $ history | tee raw.txt | grep "tar" | tee filtered.txt
-    $ ls -l *.sh | tee log.txt
-    $ ls -l *.py | tee -a log.txt # Append
-
-[How tee works](http://en.wikipedia.org/wiki/Tee_(command)#mediaviewer/File:Tee.svg)
-
-    $ ls *.txt 2>&1 | tee log.txt
-
-    $ script
-    $ ls -l
-    $ CTRL-D
-    $ cat typescript
-
-Record commands typed, commands with lots of outputs, trial-and-error when building software.
-
-Add to lab notebook.
-
-Send exact copy of command and error message to support or paste into a ticket.
-
-Rework into a blog or tutorial.
+    $ ps -A
+    $ kill 3 # Kill process with given process number
+    $ jobs -l
 
 Executables
 -----------
@@ -252,6 +257,8 @@ Useful for:
 * Setting user or application specirfic environment variables.
 * Updating standard library and execution paths e.g. `PATH`.
 
+Example:
+
     $ nano ~/bash_profile
     echo "Running .bash_profile"
     $ nano ~/bashrc
@@ -271,6 +278,15 @@ When an interactive, non-login, shell is created:
 Distinction is important when running applications that spawn new shells e.g. `mpiexec.hydra`.
 
 Other shells have their own equivalents (e.g. `.profile`).
+
+Clean up
+--------
+
+Remove temporary files and directories e.g.:
+
+    $ rm *.out
+    $ rm *.txt
+    $ rm *.tmp
 
 Shell power
 -----------
@@ -292,3 +308,4 @@ Dr. Drang (2011) [More shell, less egg](http://www.leancrew.com/all-this/2011/12
     $ ./wordcount.sh < books/war.txt 10
 
 "A wise engineering solution would produce, or better, exploit-reusable parts." - Doug McIlroy
+
