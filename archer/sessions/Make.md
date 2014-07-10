@@ -132,27 +132,27 @@ Answer: the target is now up-to-date and newer than its dependency.
 
 Add a rule:
 
-    jekyll.dat : books/jekyll.txt
-        python wordcount.py books/jekyll.txt jekyll.dat
+    abyss.dat : books/abyss.txt
+        python wordcount.py books/abyss.txt abyss.dat
 
 `touch` updates a file's time-stamp which makes it look as if it's been modified.
 
-    touch books/jekyll.txt
+    touch books/abyss.txt
     make
 
-Nothing happens to `jekyll.dat` as the first rule in the makefile, the default rule, is used.
+Nothing happens to `abyss.dat` as the first rule in the makefile, the default rule, is used.
 
-    make jekyll.dat
+    make abyss.dat
 
 Introduce a phony target:
 
     .PHONY : all
-    all : war.dat jekyll.dat
+    all : war.dat abyss.dat
 
 `all` is not a 'thing' - a file or directory - but depends on 'things' that are, and so can be used to trigger their rebuilding.
 
     make all
-    touch books/war.txt books/jekyll.txt
+    touch books/war.txt books/abyss.txt
     make all
 
 Order of rebuilding dependencies is arbitrary.
@@ -171,15 +171,15 @@ Solution:
     bridge.dat : books/bridge.txt
         python wordcount.py books/bridge.txt bridge.dat
 
-    all : war.dat jekyll.dat bridge.dat
+    all : war.dat abyss.dat bridge.dat
 
 Patterns
 --------
 
 Add:
 
-    analysis.tar.gz : war.dat jekyll.dat bridge.dat
-        tar -czf analysis.tar.gz war.dat jekyll.dat bridge.dat
+    analysis.tar.gz : war.dat abyss.dat bridge.dat
+        tar -czf analysis.tar.gz war.dat abyss.dat bridge.dat
 
 Run:
 
@@ -189,7 +189,7 @@ Duplication and repeated code creates maintainability issues. Makefiles are a ty
 
 Rewrite action:
 
-    tar -czf $@ war.dat jekyll.dat bridge.dat
+    tar -czf $@ war.dat abyss.dat bridge.dat
 
 `$@` means 'the target of the current rule'. It is an 'automatic variable' or 'special macro'
 
@@ -223,7 +223,7 @@ Answer: there are no files that match `*.dat` so the name `*.dat` is used as-is.
 
 Create `.data` files in a more manual way:
 
-    make war.dat jekyll.dat bridge.dat
+    make war.dat abyss.dat bridge.dat
 
 Dependencies on data and code
 -----------------------------
@@ -232,10 +232,10 @@ Output data is not just dependent upon input data but also programs that create 
 
     war.data : books/war.txt wordcount.py
     ...
-    jekyll.dat : books/jekyll.txt wordcount.py
+    abyss.dat : books/abyss.txt wordcount.py
     ...
     bridge.dat : books/bridge.txt wordcount.py
-     ...
+    ...
 
 `.txt` files are input files and have no dependencies. To make these depend on `python.py` would introduce a 'false dependency'.
 

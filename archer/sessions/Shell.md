@@ -261,6 +261,14 @@ Creation:
 
 Other shells have their own equivalents (e.g. `.profile`).
 
+Exit codes
+----------
+
+    ls books
+    echo $?  # 0 for OK
+    ls none
+    echo $?  # Non-zero for error
+
 Clean up
 --------
 
@@ -288,3 +296,7 @@ Common words problem:
 * Bentley, Knuth, McIlroy (1986) Programming pearls: a literate program Communications of the ACM, 29(6), pp471-483, June 1986 [doi:10.1145/5948.315654](http://dx.doi.org/10.1145/5948.315654)
 * Dr. Drang (2011) [More shell, less egg](http://www.leancrew.com/all-this/2011/12/more-shell-less-egg/), 4 December 2011. 
 
+Questions
+---------
+
+Any questions on anything shell-related?

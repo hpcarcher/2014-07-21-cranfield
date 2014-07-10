@@ -3,7 +3,7 @@ Testing
 
 Question: how do you test?
 
-* Just compile the code ("if it builds, ship it")?
+* Compile the code ("if it builds, ship it")?
 * Run on sets of known inputs, validate results by visual inspection?
 * Run on sets of known inputs, validate results with additional tools run manually?
 * Run on sets of known inputs, validate results automatically?
@@ -14,38 +14,31 @@ Question: how do you test?
 
 Question: if you don't test, why not?
 
-* "I don't write buggy code" - almost all code has bugs.
-* "It's too hard" - if it's hard to write a test for some code, then this is a good sign that the code is not well designed.
-* "My code can't be tested" 
- * Question: why not?
-* "It's not interesting" - which usually means...
+* "I don't write buggy code". Almost all code has bugs.
+* "It's too hard". If it's hard to write a test for some code, then this is a good sign that the code is not well designed.
+* "My code can't be tested". Why not?
+* "It's not interesting"
 * "It takes too much time and I've research to do"
 
-Why testing is important:
-
-* Correct, trustworthy research:
+Correct, trustworthy research:
  * [Geoffrey Chang](http://en.wikipedia.org/wiki/Geoffrey_Chang) had to retract 3 papers from [Science](http://www.sciencemag.org) due to a flipped sign bit.
  * McKitrick and Michaels published an [erratum](http://www.int-res.com/articles/cr2004/27/c027p265.pdf) to a [Climate Research 26(2) 2004](http://www.int-res.com/abstracts/cr/v26/n2/p159-173/) paper due to a [problem](http://crookedtimber.org/2004/08/25/mckitrick-mucks-it-up/) caused by degrees and radians.
-* Avoid embarassment e.g. Ariane 5 used Ariane 4 software. Ariane 5's new engines caused the code to produce a buffer overflow. Ariane 5 blew up!
-* Save money e.g. find a bug on your own server before you submit a job to an expensive HPC resource.
-* Save time e.g. spot bugs before you analyse data produced from your scripts.
+ * Avoid embarassment e.g. Ariane 5 used Ariane 4 software. Ariane 5's new engines caused the code to produce a buffer overflow. Ariane 5 blew up!
+ * Save money e.g. find a bug on your own server for free before you submit a job to a charged-for HPC resource.
+ * Save time e.g. spot bugs before you analyse data produced by your scripts.
 
-Testing checks code:
+Check scripts and code:
 
-* Behaves as expected and produces valid output data given valid input data. Any valid input data.
-* Fails gracefully if given invalid input data, does not crash, behave mysteriously, above all, not continue on regardless and burn CPU cycles.
-* Handles extreme boundaries of input domains, output ranges, parametric combinations or any other edge cases.
-* Behaves the same after it changes (e.g. add new features, fix bugs, optimise, parallelise) - regression testing. Nothing is worse than fixing a bug only to introduce a new one.
+* Behave as expected and produce valid outputs given valid inputs.
+* Fail gracefully if given invalid input data, do not crash, behave mysteriously, or continue running and burn CPU cycles.
+* Handle boundary conditions e.g. input domains, output ranges, parametric combinations or other edge cases.
+* Behave the same after changes e.g. new features, bug fixes, optimisations, parallelisation. Regression testing. Nothing is worse than fixing a bug only to introduce a new one.
 
-Testing documents code:
+Documents scripts and code - how to use it, how not to use it, what it does.
 
-* Shows what code does.
-* Shows how to use functions, valid and invalid outputs, expected outputs and behaviours.
+Verification - "Have we built it correctly?" Is it bug free, precise, accurate, and repeatable?
 
-Testing types:
-
-* Verification - "Have we built it correctly?" Is it bug free, precise, accurate, and repeatable?
-* Validation - "Have we built the right thing?" Is it designed in such a way as to produce the answers we are interested in, data we want, etc?
+Validation - "Have we built the right thing?" Is it designed in such a way as to produce the answers we are interested in, data we want, etc?
 
 Finding bugs before testing
 ---------------------------
@@ -60,59 +53,52 @@ Answer:
 Introducing tests from the outside-in
 -------------------------------------
 
-Software testing often is introduced via unit tests, which test small individual functions.
-
-Researchers inherit large codes, which may not have any tests. Where does one start with a unit test?
-
-Evolve tests from the outside-in.
-
+* Unit tests test small individual functions.
+* Researchers inherit large codes, which may not have any tests. 
+* Where does one start with a unit test?
+* Evolve tests from the outside-in.
 * [Software Sustainability Institute](http://www.software.ac.uk) project to introduce a test framework for [FABBER](http://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FABBER) C++ image analysis software.
 * EPCC and the Colon Cancer Genetics Group (CCGG) of the MRC Human Genetics Unit at the Western General optimised and parallelised FORTRAN genetics code.
 
-Will use as a research code `wordcount.py` which takes in a text file and outputs a data file with words and their frequencies.
+End-to-end tests and Python
+----------------------------
 
-End-to-end tests and the shell
-------------------------------
+`wordcount.py` takes in a text file and outputs a data file with words and their frequencies.
+
+Use Python to write end-to-end tests. Program being tested does not have to be Python. Could use the same approach using shell scripts for end-to-end tests.
 
 Question: what is possibly the simplest test we could do? 
 
 Answer: check there is an output file produced for a valid input file.
 
-Create `test_word_count.sh`:
+Create `test_wordcount_end_to_end.py`:
 
-    #!/bin/sh
+    import os
+    import os.path
 
-    # $1 File to check existence for.
-    test_file_exists() {
-      if [ -f "$1" ]
-      then
-        echo "OK: $1 exists"
-      else
-        echo "FAILURE: $1 not found"
-      fi
-    }
+    def file_exists(filename):
+      if (os.path.isfile(filename)):
+        print "OK ", filename, "exists"
+      else:
+        print "FAIL ", filename, "does not exist"
 
-    rm -f *.dat
-    echo "Test 1"
-    python wordcount.py books/abyss.txt abyss.dat
-    test_file_exists abyss.dat
+    for f in os.listdir("."):
+      if f.endswith(".dat"):
+        os.remove(f)
 
-Use shell functions as these commands will be called more than once - anticipate reuse.
+    print "Test war"
+    os.system("python wordcount.py books/war.txt war.dat")
+    file_exists("war.dat")
 
-Run:
+Use functions as these commands will be called more than once - anticipate reuse.
 
-    $ chmod +x test_word_count.sh
-    $ ./test_word_count,sh
+    python test_wordcount_end_to_end.py
 
 Extend:
 
-    echo "Test 2"
-    python wordcount.py books/war.txt war.dat
-    test_file_exists war.dat
-
-Run:
-
-    $ ./test_word_count,sh
+    print "Test abyss"
+    os.system("python wordcount.py books/abyss.txt abyss.dat")
+    file_exists("abyss.dat")
 
 Another simple test is for failure, that there is no output file if there is an invalid, or no, input file.
 
@@ -123,84 +109,69 @@ See [exercises](TestExercises.md).
 
 Solution:
 
-    # $1 File to check non-existence for.
-    test_file_not_exists() {
-      if [ -f "$1" ]
-      then
-        echo "FAILURE: $1 exists"
-      else
-        echo "OK: $1 not found"
-      fi
-    }
+    def file_not_exists(filename):
+      if (os.path.isfile(filename)):
+        print "FAIL ", filename, "exists"
+      else:
+        print "OK ", filename, "does not exist"
 
-    echo "Test 3"
-    python wordcount.py no_such_file.txt none.dat
-    test_file_not_exists none.dat
+    print "Test none"
+    os.system("python wordcount.py books/none none.dat")
+    file_not_exists("none.dat")
 
 Check actual outputs against expected outputs
 ---------------------------------------------
 
 Create expected outputs:
 
-    $ python wordcount.py books/abyss.txt abyss.dat
-    $ python wordcount.py books/bridge.txt bridge.dat
-    $ python wordcount.py books/kim.txt kim.dat
-    $ python wordcount.py books/war.txt war.dat
-    $ mkdir expected/
-    $ mv *.dat expected/
+    make abyss.dat
+    make bridge.dat
+    make war.dat
+    make kim.dat
+
+Or:
+
+    python wordcount.py books/abyss.txt abyss.dat
+    python wordcount.py books/bridge.txt bridge.dat
+    python wordcount.py books/kim.txt kim.dat
+    python wordcount.py books/war.txt war.dat
+
+    mkdir expected/
+    mv *.dat expected/
 
 `diff` compares files for equality:
 
-    $ python wordcount.py books/abyss.txt  > abyss.dat
-    $ diff abyss.dat expected/abyss.dat
+    python wordcount.py books/abyss.txt abyss.dat
+    diff abyss.dat expected/abyss.dat
 
-`$?` holds the exit code of the command, `0` for OK, and non-zero for errors:
+`os.system` returns the exit code of the command, `0` for OK, and non-zero for errors:
 
-    $ echo $?
-    $ diff books/abyss.txt books/kim.txt
-    $ echo $?
+    def files_equal(file1,file2):
+      cmd = "diff -q " + file1 + " " + file2
+      result = os.system(cmd)
+      if (result == 0):
+        print "OK ", file1, "equals", file2
+      else:
+        print "FAIL ", file1, "does not equal", file2
 
 Extend tests to check actual outputs against expected outputs:
 
-    # $1 file to compare
-    # $2 file to compare
-    test_files_equal() {
-      compare=`diff -rq $1 $2`
-      if [ -z "$compare" ]; then
-        echo "OK: $1 equals $2"
-      else
-        echo "FAILURE: $1 does not equal $2"
-      fi
-    }
+    files_equal("war.dat","expected/war.dat")
 
-    echo "Test 4"
-    python wordcount.py books/abyss.txt abyss.dat
-    test_files_equal abyss.dat expected/abyss.dat
-
-Run:
-
-    $ ./test_word_count.sh
-
-Check no cheating:
-
-    test_files_equal abyss.dat expected/kim.dat
-
-Restore:
-
-    test_files_equal abyss.dat expected/abyss.dat
+    files_equal("abyss.dat","expected/abyss.dat")
 
 Loop over the files rather than hard-coding every name. Reduce duplicated code:
 
-    for file in $(ls books/*.txt); do
-      name=`basename $file .txt`
-      output_file=$name.dat
-      echo "Test - $file"
-      python wordcount.py $file $output_file
-      test_file_exists $output_file
-      test_files_equal $output_file expected/$output_file
-    done
-
-Let's recode with our test framework to help detect any bugs.
+    for f in os.listdir("books"):
+      if f.endswith(".txt"):
+        name = os.path.splitext(f)[0]
+        txt = os.path.join("books",f)
+        dat = name + ".dat"
+        cmd = "python wordcount.py " + txt + " " + dat
+        os.system(cmd)
+        file_exists(dat)
+        expected = os.path.join("expected", dat)
+        files_equal(dat,expected)
 
 Exercise 2 - recode `wordcount.py`
 ----------------------------------
@@ -249,20 +220,16 @@ Add meta-data to the output file to record the provenance of the data file.
 
 Run:
 
-    $ python wordcount.py books/abyss.txt abyss.dat
-    $ head abyss.dat
-
-Run:
-
-    $ ./test_wordcount.sh
+    python wordcount.py books/abyss.txt abyss.dat
+    head abyss.dat
+    python test_wordcount_end_to_end.py
 
 Question: what is the problem?
 
 Answer: the meta-data. `diff` is too simplistic now. 
-
-Use shell commands to slice out problematic lines. But, files may have too complex a structure for this to work.
-
-Want finer-grained tests of equality between data files, using information about the file content and structure, and to discriminate between syntactic and semantic content.
+* Want finer-grained tests of equality between data files. 
+* Use information about the file content and structure.
+* Discriminate between syntactic and semantic content.
 
 When 0.1 + 0.2 == 3.00000000004
 -------------------------------
@@ -271,7 +238,7 @@ Question: what other problems might `diff` experience with data files?
 
 Answer: floating point values.
 
-    $ python
+    python
     > a = 0.1
     > b = 0.2
     > print a + b
@@ -285,13 +252,10 @@ Compare for equality within a given threshold, or delta e.g. *expected* and *act
 Testing at finer-granularities - towards unit tests
 ---------------------------------------------------
 
-End-to-end automated testing is better than nothing. But, ideally, tests at varying levels of granularity should be written.
-
-If every component has a set of tests then changes to the component can be tested before the component is integrated.
-
-It can be quicker to discover a problem when testing a 10 line function in isolation then testing it as part of an end-to-end application which may take 1 hour to run and may not even, depending upon the inputs, invoke that function. 
-
-The finest level of granularity is a unit test - a unit is the smallest testable part of an application e.g. function or module, method or class.
+* Tests at varying levels of granularity should be written.
+* Changes to a specific component can be tested before the component is integrated.
+* Quicker to discover a problem when testing a 10 line function in isolation then testing it as part of an end-to-end application which may take 1 hour to run and may not even, depending upon the inputs, invoke that function. 
+* Finest level of granularity is a unit test where a unit is the smallest testable part of an application e.g. function or module, method or class.
 
 Exercise 3 - propose some tests for `wordcount.py`
 --------------------------------------------------
@@ -356,7 +320,7 @@ Create `test_wordcount.py`:
       counts = {}
       update_word_counts(line, counts)
 
-Python [nose](https://pypi.python.org/pypi/nose/) provides a library of functions. These include tests for equality, inequality, boolean values, thrown exceptions etc.
+Python [nose](https://pypi.python.org/pypi/nose/) library includes tests for equality, inequality, boolean values, thrown exceptions etc.
 
     from nose.tools import assert_equal
 
@@ -367,11 +331,11 @@ Python [nose](https://pypi.python.org/pypi/nose/) provides a library of function
 
 Run:
 
-    $ python test_wordcount.py
+    python test_wordcount.py
 
 `nose` also comes with a tool, `nosetests` which automatically finds, runs and reports on tests.
 
-    $ nosetests test_wordcount.py
+    nosetests test_wordcount.py
 
 `.` denotes successful test function calls.
 
@@ -394,8 +358,8 @@ Add another test:
 
 xUnit test report, standard format, convert to HTML, present online.
 
-    $ nosetests --with-xunit test_wordcount.py
-    $ cat nosetests.xml
+    nosetests --with-xunit test_wordcount.py
+    cat nosetests.xml
 
 Defensive programming
 ---------------------
@@ -445,7 +409,7 @@ Allow 15 minutes or so.
 Floating point numbers
 ----------------------
 
-    $ python
+    python
     > from nose.tools import assert_almost_equal
     > expected = 2
     > expected = 2.000001
@@ -458,7 +422,7 @@ Floating point numbers
     > assert_almost_equal(expected, actual, 5)
     > assert_almost_equal(expected, actual, 6)
 
-`nose.testing` uses absolute tolerance: abs(x, y) <= delta
+`nose.testing` uses absolute tolerance: abs(x, y) <= delta.
 
 Python [decimal](http://docs.python.org/2/library/decimal.html), floating-point arithmetic functions.
 
@@ -466,7 +430,7 @@ Python [decimal](http://docs.python.org/2/library/decimal.html), floating-point 
 
 `data/` has files produced by the same software, with the same inputs, under the same configuration. One job run on on 2x1 processors, one on 4x2 processors:
 
-    $ diff -q data/2x1.dat data/data4x2.dat
+    diff -q data/2x1.dat data/data4x2.dat
 
 Use `numpy` to load and compare:
 
@@ -481,7 +445,7 @@ Replace:
 
       np.testing.assert_allclose(file21, file42, rtol=0, atol=1e-7)
 
-What is a suitable threshold for equality? That is application-specific - for some domains we might be happy to round to the nearest whole number, for others we may want to be far, far more accurate.
+What is a suitable threshold for equality? That is application-specific - for some domains round to the nearest whole number, for others be far, far more accurate.
 
 Automated testing jobs
 ----------------------

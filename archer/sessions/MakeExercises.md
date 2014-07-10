@@ -5,7 +5,7 @@ Exercise 1 - add a rule
 -----------------------
 
 Add in a rule for `bridge.dat`, based on the rules for `war.dat` and
-`jekyll.dat`.
+`abyss.dat`.
 
 Be sure to use a single tab when indenting the actions, not spaces!
 
