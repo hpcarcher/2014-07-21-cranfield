@@ -1,53 +1,53 @@
 Branching
 =========
 
-`git branch servings` to create a branch called `servings`:
+`git branch layout` to create a branch called `layout`:
 
     -c1---c2---c3                               master *
                     \
-                     .                          servings
+                     .                          layout
 
 `*` denotes the current branch.
 
-`git checkout servings` to switch to `servings`:
+`git checkout layout` to switch to `layout`:
 
     -c1---c2---c3                               master
                    \
-                    .                           servings *
+                    .                           layout *
 
-Commit changes on `servings`:
-
-    -c1---c2---c3                               master
-                \
-                 c4                             servings *
+Commit changes on `layout`:
 
     -c1---c2---c3                               master
                 \
-                 c4---c5---c6                   servings *
+                 c4                             layout *
+
+    -c1---c2---c3                               master
+                \
+                 c4---c5---c6                   layout *
 
 `git checkout master` to switch to `master`:
 
     -c1---c2---c3                               master *
                 \
-                 c4---c5---c6                   servings
+                 c4---c5---c6                   layout
 
 Commit changes on `master`:
 
     -c1---c2---c3---c7---c8                     master *
                 \
-                 c4---c5---c6                   servings
+                 c4---c5---c6                   layout
 
-`git checkout servings` to switch to `servings`:
-
-    -c1---c2---c3---c7---c8                     master
-                \
-                 c4---c5---c6                   servings *
-
-Commit changes on `servings`:
+`git checkout layout` to switch to `layout`:
 
     -c1---c2---c3---c7---c8                     master
                 \
-                 c4---c5---c6---c9              servings *
+                 c4---c5---c6                   layout *
+
+Commit changes on `layout`:
+
+    -c1---c2---c3---c7---c8                     master
+                \
+                 c4---c5---c6---c9              layout *
 
 Merges
 ------
@@ -56,48 +56,48 @@ Merges
 
     -c1---c2---c3---c7---c8                     master *
                 \
-                 c4---c5---c6---c9              servings
+                 c4---c5---c6---c9              layout
 
 Commit changes on `master`:
 
     -c1---c2---c3---c7---c8---c10               master *
                 \
-                 c4---c5---c6---c9              servings
+                 c4---c5---c6---c9              layout
 
- `git merge servings` to merge changes from `servings` into `master`:
+ `git merge layout` to merge changes from `layout` into `master`:
 
     -c1---c2---c3---c7---c8---c10---M1           master *
                 \                 /
-                 c4---c5---c6---c9               servings
+                 c4---c5---c6---c9               layout
 
 Conflicts
 ---------
 
-`git checkout servings` to switch to `servings`:
+`git checkout layout` to switch to `layout`:
 
     -c1---c2---c3---c7---c8---c10---M1           master
                 \                 /
-                 c4---c5---c6---c9               servings *
+                 c4---c5---c6---c9               layout *
 
-Commit changes on `servings`:
+Commit changes on `layout`:
 
     -c1---c2---c3---c7---c8---c10---M1            master
                 \                 /
-                 c4---c5---c6---c9---c11          servings *
+                 c4---c5---c6---c9---c11          layout *
 
 `git checkout master` to switch to `master`:
 
     -c1---c2---c3---c7---c8---c10---M1            master *
                 \                 /
-                 c4---c5---c6---c9---c11          servings
+                 c4---c5---c6---c9---c11          layout
 
 Commit changes to same parts of files on `master`:
 
     -c1---c2---c3---c7---c8---c10---M1---c12      master *
                 \                 /
-                 c4---c5---c6---c9---c11          servings
+                 c4---c5---c6---c9---c11          layout
 
- `git merge servings` to merge changes from `servings` into `master`:
+ `git merge layout` to merge changes from `layout` into `master`:
 
 `CONFLICT` warning is given and `Unmerged` files need to be edited to remove conflict markup:
 
@@ -113,7 +113,7 @@ Commit changes to same parts of files on `master`:
 
     -c1---c2---c3---c7---c8---c10---M1---c12---M2 master *
                 \                 /           /
-                 c4---c5---c6---c9---c11------    servings
+                 c4---c5---c6---c9---c11------    layout
 
 Branching and software development
 ----------------------------------

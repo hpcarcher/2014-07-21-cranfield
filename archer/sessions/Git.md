@@ -54,7 +54,7 @@ Configure Git locally
 Add files and directories and record changes
 --------------------------------------------
 
-Create a file `recipe.md` in [Markdown](http://daringfireball.net/projects/markdown/syntax) syntax.
+Create a file `soup.md` in [Markdown](http://daringfireball.net/projects/markdown/syntax) syntax.
 
 Add Ingredients and Cooking Instructions.
 
@@ -64,8 +64,8 @@ Current directory is called the 'working directory'.
 
 `Untracked` - files in working directory that Git is not managing.
 
-    git add recipe.md     # Add file to staging area (AKA index or cache or loading dock)
-    git status recipe.md  # Can check status to whole directory or specific files.
+    git add soup.md     # Add file to staging area (AKA index or cache or loading dock)
+    git status soup.md  # Can check status to whole directory or specific files.
 
 `Changes to be committed` - content in the staging area, ready for Git to manage.
 
@@ -77,9 +77,14 @@ Provide a commit message, the "why":
 * Messages like "made a change" or "commit 5" are redundant.
 * Good commit messages usually have a one-line description followed by a longer explanation.
 
+`warning: LF will be replaced by CRLF in ...`:
+
+* Different line encoding styles across platforms.
+* Git turns CRLF to LF to try and help.
+
 Git shows number of files changed and the number of lines inserted or deleted across all those files.
 
-    git status recipe.md
+    git status soup.md
 
 `nothing to commit` - Git is managing everything in the working directory.
 
@@ -89,13 +94,13 @@ Git shows number of files changed and the number of lines inserted or deleted ac
 
     git log --relative-date
 
-Make updates to `reciie.md`.
+Make updates to `soup.md`.
 
-    git status recipe.md
+    git status soup.md
 
 `Changes not staged for commit` section and `modified` marker - file managed by Git has been modified and changes are not yet committed.
 
-    git add recipe.md
+    git add soup.md
     git commit
 
 Good commits are atomic and consist of the smallest change that remains meaningful. 
@@ -110,7 +115,7 @@ Create a directory:
     mkdir images
     cd images
 
-Download image of recipe from the web and put into `images` or use `wget`:
+Download image of soup from the web and put into `images` or use `wget`:
 
     wget http://www.cookuk.co.uk/images/slow-cooker-winter-vegetable-soup/smooth-soup.jpg
 
@@ -119,7 +124,7 @@ Add directory to repository:
     git add images
     git commit -m "Added images directory and soup image" images
 
-Add link to recipe:
+Add link to soup:
 
     [Soup](images/smooth-soup.jpg "My soup")
 
@@ -141,9 +146,9 @@ What not to commit to the repository:
 View differences
 ----------------
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `soup.md`.
 
-    git diff recipe.md
+    git diff soup.md
 
 * `-` - a line was deleted. 
 * `+` - a line was added. 
@@ -152,22 +157,22 @@ Make and commit changes to `recipe.md`.
 Discard changes
 ---------------
 
-    git checkout -- recipe.md  # Throw away local changes and 'revert'.
+    git checkout -- soup.md  # Throw away local changes and 'revert'.
     git status data-report.md
 
 Look at history
 ---------------
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `soup.md`.
 
     git log
-    git log recipe.md
+    git log soup.md
     git diff COMMITID
     git diff OLDER_COMMITID NEWER_COMMITID
     git log
     git checkout COMMITID  # Roll-back working directory to state of repository at first commit.
     ls
-    cat recipe.md
+    cat soup.md
     git checkout master  # Return to current state.
     ls
 
@@ -184,10 +189,11 @@ Use tags as nicknames for commit identifiers
     git tag BOOT_CAMP  # Human-readable name for cryptic commit identifier.
     git tag
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `soup.md`.
 
     git checkout BOOT_CAMP
     git checkout master
+    git diff BOOT_CAMP
 
 Tags:
 
@@ -198,7 +204,7 @@ Tags:
 Branches
 --------
 
-    git status recipe.md
+    git status
 
 * `master` is a branch - a set of related commits made to files the repository, each of which can be used and edited and updated concurrently. 
 * `master` is Git's default branch.
@@ -216,24 +222,26 @@ Answer:
 Pretty-print log:
 
     git log --oneline --graph --decorate --all
+    alias gitlog='git log --oneline --graph --decorate --all'
+    gitlog
 
 View and create branches:
 
     git branch  # See all branch names. * is current branch.
-    git branch servings
+    git branch layout
     git branch
-    git checkout servings
+    git checkout layout
     git branch  # Two concurrent branches now exist.
 
-In `servings`, make and commit changes to the end of `recipe.md`, pretty-print log.
+In `layout`, make and commit changes to the end of `soup.md`, pretty-print log.
 
-Checkout `master`, make and commit changes to existing lines of `recipe.md`, pretty-print log.
+Checkout `master`, make and commit changes to existing lines of `soup.md`, pretty-print log.
 
-Checkout `servings`, make and commit changes to the end of `recipe.md`, pretty-print log.
+Checkout `layout`, make and commit changes to the end of `soup.md`, pretty-print log.
 
-Checkout `master`, make and commit changes to existing lines of `recipe.md`, pretty-print log.
+Checkout `master`, make and commit changes to existing lines of `soup.md`, pretty-print log.
 
-    git merge servings  # Merge changes from servings into master
+    git merge layout  # Merge changes from layout into master
 
 Merging is done file-by-file, line by line. A new commit is automatically created to represent the merge.
 
@@ -242,11 +250,11 @@ Merging is done file-by-file, line by line. A new commit is automatically create
 
 What happens if we edit the same lines in both branches?
 
-Checkout `servings`, make and commit changes to `recipe.md`, pretty-print log.
+Checkout `layout`, make and commit changes to `soup.md`, pretty-print log.
 
-Checkout `master`, make and commit changes to the same lines of `recipe.md`, pretty-print log.
+Checkout `master`, make and commit changes to the same lines of `soup.md`, pretty-print log.
 
-    git merge servings
+    git merge layout
 
 `CONFLICT` - changes can't be seamlessly merged because changes have been made to the same set of lines in the same files.
 
@@ -254,7 +262,7 @@ Checkout `master`, make and commit changes to the same lines of `recipe.md`, pre
 
 `Unmerged` - files which have conflicts.
 
-    cat recipe.md
+    cat soup.md
 
 Conflict markup:
 
@@ -270,14 +278,14 @@ Conflict resolution - edit and do one of:
 
 Resolve conflict:
 
-    git add recipe.md  # Explicit add and commit to resolve conflict.
-    git commit -m "Resolved confict in recipe.md by ..."
+    git add soup.md  # Explicit add and commit to resolve conflict.
+    git commit -m "Resolved confict in soup.md by ..."
     git log
     git log --oneline --graph --decorate --all
 
 Delete branch when no longer needed.
 
-    git branch -D servings
+    git branch -D layout
 
 Review using [Images of the key steps in this section](GitBranches.md)
 
@@ -390,9 +398,9 @@ Answer: `cookerybook` was the directory that held our local repository but was n
 Push changes to remote repository
 ---------------------------------
 
-Make and commit changes to `recipe.md`.
+Make and commit changes to `soup.md`.
 
-    git push
+    git push origin master
 
 Refresh web pages and check that changes are now in the remote repository.
 
@@ -412,7 +420,9 @@ Both Owner and partner clone the Owner's repository e.g.
   
     git clone https://USERNAME@bitbucket.org/USERNAME/cookbook.git 
 
-Owner make, commit and push changes to `recipe.md`.
+Owner make, commit and push changes to `soup.md`.
+
+Instructor clone another copy and "mock" collaboration.
 
 Pull changes from a remote repository
 -------------------------------------
@@ -420,23 +430,23 @@ Pull changes from a remote repository
 Partner 'fetch' changes from remote repository:
 
     git fetch
-    git diff origin/master
+    git diff master origin/master
 
 `diff` compares current, `master` branch, with `origin/master` branch. This is the name of the `master` branch in `origin` and is the alias for the cloned repository, the one in our remote repository.
 
 'Merge' changes into current repository, which merges the branches together:
 
     git merge origin/master
-    cat recipe.md
+    cat soup.md
 
-Partner make, commit and push changes to `recipe.md`.
+Partner make, commit and push changes to `soup.md`.
 
 Owner 'fetch' changes from remote repository.
 
 Partner 'pull' changes from remote repository:
 
     git pull
-    cat recipe.md
+    cat soup.md
     git log
 
 `pull` does a `fetch` and a `merge` in one go. 
