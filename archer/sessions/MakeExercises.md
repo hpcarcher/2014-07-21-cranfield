@@ -25,7 +25,7 @@ Exercise 3 - use a macro
 ------------------------
 
 Replace occurrences of `wordcount.py` with the macro-name,
-`$(PROCESSOR)`.
+`$(COUNTER)`.
 
 Exercise 4 - add another processing stage
 -----------------------------------------

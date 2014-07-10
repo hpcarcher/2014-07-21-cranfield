@@ -48,30 +48,30 @@ A simple data processing pipeline
 
 Count the words in a text file:
 
-    $ python wordcount.py books/war.txt war.dat
-    $ head war.dat
-    $ python wordcount.py books/abyss.txt abyss.dat
-    $ head abyss.dat
+    python wordcount.py books/war.txt war.dat
+    head war.dat
+    python wordcount.py books/abyss.txt abyss.dat
+    head abyss.dat
 
 Count the words in a text file over a certain length:
 
-    $ python wordcount.py books/war.txt war.dat 12
-    $ head war.dat
+    python wordcount.py books/war.txt war.dat 12
+    head war.dat
 
 Plot the first 10 word counts:
 
-    $ python plotcount.py war.dat show
-    $ python plotcount.py abyss.dat show
+    python plotcount.py war.dat show
+    python plotcount.py abyss.dat show
 
 Plot the first N word counts in a data file:
 
-    $ python plotcount.py war.dat show N
-    $ python plotcount.py abyss.dat show N
+    python plotcount.py war.dat show N
+    python plotcount.py abyss.dat show N
 
 Plot the word counts in a data file and save:
 
-    $ python plotcount.py war.dat war.jpg
-    $ python plotcount.py war.dat war.jpg 5
+    python plotcount.py war.dat war.jpg
+    python plotcount.py war.dat war.jpg 5
 
 It doesn't really matter which programs we are using, could be anything.
 
@@ -80,13 +80,13 @@ A first makefile
 
 Type command manually:
 
-    $ python wordcount.py books/war.txt war.dat
-    $ head war.dat
+    python wordcount.py books/war.txt war.dat
+    head war.dat
 
 Shell script. But:
 
-    $ touch books/war.txt
-    $ ls -l books/war.txt war.dat
+    touch books/war.txt
+    ls -l books/war.txt war.dat
 
 `war.dat` is now older than `books/war.txt` - 'out-of-date' - so needs to be updated.
 
@@ -118,13 +118,13 @@ Add this information as comments:
 
 Run:
 
-    $ make
+    make
 
 `-f` can name a specific makefile. If omitted, then a default of `Makefile` is assumed.
 
 Make uses 'last modification time' to determine if dependencies are newer than targets.
 
-    $ make
+    make
 
 Question: why did nothing happen?
 
@@ -137,12 +137,12 @@ Add a rule:
 
 `touch` updates a file's time-stamp which makes it look as if it's been modified.
 
-    $ touch books/jekyll.txt
-    $ make
+    touch books/jekyll.txt
+    make
 
 Nothing happens to `jekyll.dat` as the first rule in the makefile, the default rule, is used.
 
-    $ make jekyll.dat
+    make jekyll.dat
 
 Introduce a phony target:
 
@@ -151,9 +151,9 @@ Introduce a phony target:
 
 `all` is not a 'thing' - a file or directory - but depends on 'things' that are, and so can be used to trigger their rebuilding.
 
-    $ make all
-    $ touch books/war.txt books/jekyll.txt
-    $ make all
+    make all
+    touch books/war.txt books/jekyll.txt
+    make all
 
 Order of rebuilding dependencies is arbitrary.
 
@@ -183,7 +183,7 @@ Add:
 
 Run:
 
-    $ make analysis.tar.gz
+    make analysis.tar.gz
 
 Duplication and repeated code creates maintainability issues. Makefiles are a type of code.
 
@@ -208,14 +208,14 @@ Bash wild-card can be used in file names. Replace dependencies with:
 
     analysis.tar.gz : *.dat
 
-    $ make analysis.tar.gz
-    $ touch *.dat
-    $ make analysis.tar.gz
+    make analysis.tar.gz
+    touch *.dat
+    make analysis.tar.gz
 
 But watch what happens:
 
-    $ rm *.dat
-    $ make analysis.tar.gz
+    rm *.dat
+    make analysis.tar.gz
 
 Question: any guesses as to why this is?
 
@@ -223,7 +223,7 @@ Answer: there are no files that match `*.dat` so the name `*.dat` is used as-is.
 
 Create `.data` files in a more manual way:
 
-    $ make war.dat jekyll.dat bridge.dat
+    make war.dat jekyll.dat bridge.dat
 
 Dependencies on data and code
 -----------------------------
@@ -239,8 +239,8 @@ Output data is not just dependent upon input data but also programs that create 
 
 `.txt` files are input files and have no dependencies. To make these depend on `python.py` would introduce a 'false dependency'.
 
-    $ touch wordcount.py
-    $ make all
+    touch wordcount.py
+    make all
 
 Pattern rules
 -------------
@@ -281,7 +281,7 @@ Answer: the program name. Suppose the name of our program changes?
 
 Use a 'macro', a Make variable:
 
-    PROCESSOR=wordcount.py
+    COUNTER=wordcount.py
 
 Exercise 3 - use a macro
 ------------------------
@@ -290,13 +290,13 @@ See [exercises](MakeExercises.md).
 
 Solution:
 
-    PROCESSOR=wordcount.py
+    COUNTER=wordcount.py
 
     # Calculate word frequencies.
-    %.dat : books/%.txt $(PROCESSOR)
-        python $(PROCESSOR) $< $@
+    %.dat : books/%.txt $(COUNTER)
+        python $(COUNTER) $< $@
 
-    analysis.tar.gz : *.dat $(PROCESSOR)
+    analysis.tar.gz : *.dat $(COUNTER)
         tar -czf $@ $^
 
 Keep macros at the top of a Makefile so they are easy to find. Or put in another file.
@@ -304,7 +304,7 @@ Keep macros at the top of a Makefile so they are easy to find. Or put in another
 Move the macros to `config.mk`:
 
     # Word frequency calculations.
-    PROCESSOR=wordcount.py
+    COUNTER=wordcount.py
 
 Read the macros into the makefile:
 
@@ -322,8 +322,8 @@ What make will do
 
 If unsure of what make would do:
 
-    $ touch books/*.txt
-    $ make -n analysis.tar.gz
+    touch books/*.txt
+    make -n analysis.tar.gz
 
 Displays commands that make would run.
 
@@ -340,7 +340,7 @@ Makefile, `Makefile`:
     %.jpg : %.dat $(PLOTTER)
         python $(PLOTTER) $< $@
 
-    analysis.tar.gz : *.dat *.jpg $(PROCESSOR)
+    analysis.tar.gz : *.dat *.jpg $(COUNTER)
         tar -czf $@ $^
 
     clean : 
