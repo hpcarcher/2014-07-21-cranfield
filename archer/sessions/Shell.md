@@ -1,8 +1,7 @@
-
 Bash Shell
 ==========
 
-A number of shell flavours e.g. ksh, csh so some specifics may differ though the fundamental concepts are the same.
+Syntax specifics may differ from other shell flabours (ksh,csh) but fundamental concepts are the same.
 
 Navigation
 ----------
@@ -23,21 +22,15 @@ Auto-completion (tab completion)
 Command history
 ---------------
 
-Move back and forward through commands executed:
-
 * `CTRL-P` or up arrow - move back to older command.
 * `CTRL-N` or down arrow - move forward to newer command.
-
-Edit a command:
-
 * `CTRL-B` or left arrow - move left in line.
 * `CTRL-F` or right arrow - move right in line.
 * `CTRL-A` - jump to start of line.
 * `CTRL-E` - jump to end of line.
+* Type - edit command.
 
-Avoid having to retype commands.
-
-Save time.
+Reusing not retyping saves time.
 
 Input and output redirection
 ----------------------------
@@ -53,25 +46,23 @@ Input and output redirection
     $ ls *.cfg > output.txt
     $ cat output.txt
 
-Question: Why is this empty?
+Question: why is this empty?
 
 Answer: outputs and errors happen on two different streams.
 
-    $ ls *.cfg 2> output.txt  # 2 is standard error
-    $ ls books/*.txt 1> output.txt  # 1 is standard output
-    $ ls *.cfg *.txt *.png > output.txt 2>&1
+    $ ls *.cfg 2> output.txt                  # 2 is standard error
+    $ ls books/*.txt 1> output.txt            # 1 is standard output
+    $ ls *.cfg *.txt *.png > output.txt 2>&1  # Capture both standard output and error
 
     $ ./interactive.sh
-    $ cat config.properties
+    $ cat config.properties                 # One line per interactive input
     $ ./interactive.sh < config.properties  # < redirects input (AKA standard input)
     $ ./interactive.sh < config.properties > out.txt 2>&1
 
 Backticks
 ---------
 
-Everything inside backticks is executed before the current command. The output is used within the current command:
-
-    $ FILES=`ls books/*.txt`  # FILES is a shell variable.
+    $ FILES=`ls books/*.txt`  # Contents of `` are executed before the enclosing command.
     $ echo $FILES
     $ for FILE in $FILES; do echo $FILE; done
     $ HOST=`hostname`
@@ -85,13 +76,12 @@ Power of the pipe
 
 Count text files:
 
-    $ find . -name '*.txt' > files.tmp
-    $ wc -l files.tmp
+    $ find . -name '*.txt' > files.tmp  # find outputs list of files
+    $ wc -l files.tmp                   # wc inputs list of files
 
-`find` outputs a list of files, `wc` inputs a list of files. Skip the need for the temporary file:
+Remove need for temporary file:
 
-    $ find . -name '*.txt' | wc -l  # | is a pipe
-    $ echo "Number of .txt files:" ; find . -name '*.txt' | wc -l # ; runs each command separately
+    $ find . -name '*.txt' | wc -l                                # | is a pipe
 
 Question: what does this do?
 
@@ -99,28 +89,29 @@ Question: what does this do?
 
 Answer: count the number of files with `s` in their name.
 
-Pipe demonstrates principles of good programming practice:
+Demonstrates principles of good programming practice:
 
-* Power of modular components with well-defined interfaces.
+* Modular components with well-defined interfaces.
 * High cohesion - degree to which elements of a component belong together.
 * Low coupling - degree to which a component depends on other components.
-* "little pieces loosely joined".
-* Bolt together to create powerful computational and data processing workflows.
+* "little pieces loosely joined" together to create computational and data processing workflows.
 * `history` + `grep` = function to search for a command.
-* Applies to C functions and libraries, FORTRAN sub-routines and modules, Java packages, classes and methods, Python functions and classes etc.
+* C functions and libraries, FORTRAN types, subroutines, functions and modules, Java packages, classes and methods, Python functions and classes.
+
+Separate commands on same line:
+
+    $ echo "Number of .txt files:" ; find . -name '*.txt' | wc -l  # ; runs each command separately
 
 `tee` and `script`
 ------------------
 
-Capture standard outpupt in the middle of a pipeline:
-
-    $ ls -l *.sh | tee log.txt
+    $ ls -l *.sh | tee log.txt  # Capture standard output mid-pipeline
     $ cat log.txt
     $ history | tee raw.txt | grep "tar" | tee filtered.txt
     $ ls -l *.sh | tee log.txt
     $ ls -l *.py | tee -a log.txt # Append
 
-[How tee works](http://en.wikipedia.org/wiki/Tee_(command)#mediaviewer/File:Tee.svg)
+[How tee works](http://en.wikipedia.org/wiki/Tee_\(command\)#mediaviewer/File:Tee.svg)
 
     $ ls *.txt 2>&1 | tee log.txt
 
@@ -129,13 +120,14 @@ Capture standard outpupt in the middle of a pipeline:
     $ CTRL-D
     $ cat typescript
 
-Record commands typed, commands with lots of outputs, trial-and-error when building software.
+Provenance:
 
-Add to lab notebook.
-
-Send exact copy of command and error message to support or paste into a ticket.
-
-Rework into a blog or tutorial.
+* Create record of commands typed, input parameters, output file names.
+* Experiments when using command-line tools.
+* Trial-and-error when resolving problems when building software.
+* Send exact copies of commands and error messages in e-mails or bug reports.
+* Add to lab notebook.
+* Rework scripts into blogs or tutorials.
 
 Command history revisited
 -------------------------
@@ -151,9 +143,7 @@ Command history revisited
     $ fc -l ssh   # Display commands from last 'ssh' command
     $ history -c  # Clear history e.g. you accidently type your password
 
-Avoid having to up-arrow through 100s of commands.
-
-Save time.
+Reusing not retyping, or up-arrowing through 10s of commands, saves time.
 
 `source` versus `sh`
 --------------------
@@ -164,12 +154,14 @@ Save time.
     $ sh variables.sh
     $ echo $EXAMPLE_DIR
 
-These spawn a new shell, run the commands and shut down the new shell. This can be problematic if setting variables in the current shell.
+Question: why is the variable not set?
 
-    $ source variables.sh
+Answer: a new shell is spawned, commands are run, the shell is killed.
+
+    $ source variables.sh  # Run the commands within the current shell
     $ echo $EXAMPLE_DIR
 
-Beware if these have exit commands as your shell may unexpectedly or annoyingly shut down.
+May kill the current shell if one of the commands is `exit`.
 
 Packaging
 ---------
@@ -179,27 +171,24 @@ Packaging
     $ cp ../books/*.txt .
     $ tar -cvzf books.tar.gz *txt  # TAR Create Verbose, TAR File, gZip
     $ rm *.txt
-    $ tar -xvf books.tar.gz  # eXtract
-
-Put content in a directory then zip or tar up that single directory so it doesn't overwite someone else's files when unpacked.
-
-Put the version number or a date in the bundle name. If someone asks for advice, you'll know exactly what version they have.
-
+    $ tar -xvf books.tar.gz        # eXtract ... all over user's current directory!
     $ cd ..
-    $ tar -cvzf books.tar.gz books
+    $ cp -r books books-1.1
+    $ tar -cvzf books.tar.gz books-1.1  # ZIP up contents within directory
     $ mkdir unpack-nice
     $ cd unpack-nice
-    $ mv ../books.tar.gz .
+    $ mv ../books-1.1.tar.gz .  
+    $ tar -tvf books-1.1.tar.gz  # lisT, without unpacking
+    $ tar -xvf books-1.1.tar.gz  # eXtract
 
-List files that will be unpacked, without unpacking them:
-  
-    $ tar -tvf books.tar.gz  # lisT
-    $ tar -xvf books.tar.gz  # eXtract
+Security:
 
-For files online, file size and MD5 sum (hash or checksum that acts as a fingerprint), allow others to check the files have not been tampered with:
+    $ ls -l books-1.1.tar.gz   # File size
+    $ md5sum books-1.1.tar.gz  # MD5 checksum (hash that acts as fingerprint)
 
-    $ ls -l books.tar.gz
-    $ md5sum books.tar.gz  # MD5 checksum
+Provenance:
+
+* Version number or date directory and bundle.
 
 Jobs
 ----
@@ -229,11 +218,13 @@ Jobs
 Executables
 -----------
 
-Path:
-
     $ echo $PATH
     $ interactive.sh
+    $ cd ..
+    $ interactive.sh
+    $ cd DIRECTORY
     $ PATH=~:$PATH
+    $ cd ..
     $ interactive.sh
 
 `type' is a BASH built-in command which describes commands:
@@ -251,13 +242,7 @@ Wrong version of a compiler, interpreter, tool being used? Check the path.
 .bash_profile and .bashrc
 -------------------------
 
-Useful for:
-
-* Creating aliases.
-* Setting user or application specirfic environment variables.
-* Updating standard library and execution paths e.g. `PATH`.
-
-Example:
+Set up aliases, environment variables for user or applications and library paths.
 
     $ nano ~/bash_profile
     echo "Running .bash_profile"
@@ -266,23 +251,18 @@ Example:
     $ bash
     $ CTRL-D
 
-When a login shell is created:
+Create new login or GitBash shell.
 
-* `.bashrc` is read
-* `.bash_profile` is read.
+Creation:
 
-When an interactive, non-login, shell is created:
-
-* `.bashrc` is read
-
-Distinction is important when running applications that spawn new shells e.g. `mpiexec.hydra`.
+* `.bashrc` is read when an interactive, non-login, shell is created
+* `.bash_profile` is also read when a login shell is created
+* Keep distinction in mind when running applications that spawn new shells e.g. `mpiexec.hydra`.
 
 Other shells have their own equivalents (e.g. `.profile`).
 
 Clean up
 --------
-
-Remove temporary files and directories e.g.:
 
     $ rm *.out
     $ rm *.txt
@@ -297,10 +277,6 @@ Common words problem:
 * Identify the N most frequently-occurring words.
 * Print out a sorted list of the words with their frequences.
 
-Bentley, Knuth, McIlroy (1986) Programming pearls: a literate program Communications of the ACM, 29(6), pp471-483, June 1986 [doi:10.1145/5948.315654](http://dx.doi.org/10.1145/5948.315654)
-
-Dr. Drang (2011) [More shell, less egg](http://www.leancrew.com/all-this/2011/12/more-shell-less-egg/), 4 December 2011. 
-
 10 plus pages of Pascal ... or ... 1 line of shell:
 
     $ cat wordcount.sh
@@ -308,4 +284,7 @@ Dr. Drang (2011) [More shell, less egg](http://www.leancrew.com/all-this/2011/12
     $ ./wordcount.sh < books/war.txt 10
 
 "A wise engineering solution would produce, or better, exploit-reusable parts." - Doug McIlroy
+
+* Bentley, Knuth, McIlroy (1986) Programming pearls: a literate program Communications of the ACM, 29(6), pp471-483, June 1986 [doi:10.1145/5948.315654](http://dx.doi.org/10.1145/5948.315654)
+* Dr. Drang (2011) [More shell, less egg](http://www.leancrew.com/all-this/2011/12/more-shell-less-egg/), 4 December 2011. 
 
