@@ -1,7 +1,7 @@
 Branching
 =========
 
-`git branch layout` to create a branch called `layout`:
+`git branch layout` creates a branch called `layout`:
 
     -c1---c2---c3                               master *
                     \
@@ -9,13 +9,13 @@ Branching
 
 `*` denotes the current branch.
 
-`git checkout layout` to switch to `layout`:
+`git checkout layout` switches to `layout`:
 
     -c1---c2---c3                               master
                    \
                     .                           layout *
 
-Commit changes on `layout`:
+Commit changes to `layout`:
 
     -c1---c2---c3                               master
                 \
@@ -25,25 +25,25 @@ Commit changes on `layout`:
                 \
                  c4---c5---c6                   layout *
 
-`git checkout master` to switch to `master`:
+`git checkout master` switches to `master`:
 
     -c1---c2---c3                               master *
                 \
                  c4---c5---c6                   layout
 
-Commit changes on `master`:
+Commit changes to `master`:
 
     -c1---c2---c3---c7---c8                     master *
                 \
                  c4---c5---c6                   layout
 
-`git checkout layout` to switch to `layout`:
+Switch to `layout`:
 
     -c1---c2---c3---c7---c8                     master
                 \
                  c4---c5---c6                   layout *
 
-Commit changes on `layout`:
+Commit changes to `layout`:
 
     -c1---c2---c3---c7---c8                     master
                 \
@@ -52,19 +52,19 @@ Commit changes on `layout`:
 Merges
 ------
 
-`git checkout master` to switch to `master`:
+Switch to `master`:
 
     -c1---c2---c3---c7---c8                     master *
                 \
                  c4---c5---c6---c9              layout
 
-Commit changes on `master`:
+Commit changes to `master`:
 
     -c1---c2---c3---c7---c8---c10               master *
                 \
                  c4---c5---c6---c9              layout
 
- `git merge layout` to merge changes from `layout` into `master`:
+`git merge layout` merges changes from `layout` into `master`:
 
     -c1---c2---c3---c7---c8---c10---M1           master *
                 \                 /
@@ -73,33 +73,36 @@ Commit changes on `master`:
 Conflicts
 ---------
 
-`git checkout layout` to switch to `layout`:
+Switch to `layout`:
 
     -c1---c2---c3---c7---c8---c10---M1           master
                 \                 /
                  c4---c5---c6---c9               layout *
 
-Commit changes on `layout`:
+Commit changes to `layout`:
 
     -c1---c2---c3---c7---c8---c10---M1            master
                 \                 /
                  c4---c5---c6---c9---c11          layout *
 
-`git checkout master` to switch to `master`:
+Switch to `master`:
 
     -c1---c2---c3---c7---c8---c10---M1            master *
                 \                 /
                  c4---c5---c6---c9---c11          layout
 
-Commit changes to same parts of files on `master`:
+Commit changes to same parts of files to `master`:
 
     -c1---c2---c3---c7---c8---c10---M1---c12      master *
                 \                 /
                  c4---c5---c6---c9---c11          layout
 
- `git merge layout` to merge changes from `layout` into `master`:
+ `git merge layout` merges changes from `layout` to `master`.
 
-`CONFLICT` warning is given and `Unmerged` files need to be edited to remove conflict markup:
+* `CONFLICT` warning
+* `Unmerged` files need to be edited to remove conflict markup:
+
+<p/>
 
     <<<<<<< HEAD
 
@@ -107,9 +110,9 @@ Commit changes to same parts of files on `master`:
 
     >>>>>>> 71d34decd32124
 
-`git add` to mark `Unmerged` files as having their conflicts resolved.
+`git add` marks `Unmerged` files as having their conflicts resolved.
 
-`git commit` to commit merge.
+`git commit` commits merge.
 
     -c1---c2---c3---c7---c8---c10---M1---c12---M2 master *
                 \                 /           /

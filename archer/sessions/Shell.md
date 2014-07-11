@@ -1,7 +1,7 @@
 Bash Shell
 ==========
 
-Syntax specifics may differ from other shell flabours (ksh,csh) but fundamental concepts are the same.
+Bourne Again Shell. Syntax differs from other shells (ksh,csh,zsh) but fundamental concepts are the same.
 
 Navigation
 ----------
@@ -37,9 +37,11 @@ Input and output redirection
 
     ls books/*.txt > txt_files.txt  # > redirects output (AKA standard output)
     cat txt_files.txt
+
     wc books/*.txt > words.txt
     cat words.txt
-    cat > myscript.txt  # Echo standard input and redirect
+
+    cat > myscript.txt              # Echo standard input and redirect
     Blah
     CTRL-D
 
@@ -55,8 +57,8 @@ Answer: outputs and errors happen on two different streams.
     ls *.cfg *.txt *.png > output.txt 2>&1  # Capture both standard output and error
 
     ./interactive.sh
-    cat config.properties                 # One line per interactive input
-    ./interactive.sh < config.properties  # < redirects input (AKA standard input)
+    cat config.properties                   # One line per interactive input
+    ./interactive.sh < config.properties    # < redirects input (AKA standard input)
     ./interactive.sh < config.properties > out.txt 2>&1
 
 Backticks
@@ -65,8 +67,10 @@ Backticks
     FILES=`ls books/*.txt`  # Contents of `` are executed before the enclosing command.
     echo $FILES
     for FILE in $FILES; do echo $FILE; done
+
     HOST=`hostname`
     echo HOST
+
     WHEREIWAS=`pwd`
     cd /
     cd $WHEREIWAS
@@ -79,9 +83,9 @@ Count text files:
     find . -name '*.txt' > files.tmp  # find outputs list of files
     wc -l files.tmp                   # wc inputs list of files
 
-Remove need for temporary file:
+Avoid temporary file:
 
-    find . -name '*.txt' | wc -l                                # | is a pipe
+    find . -name '*.txt' | wc -l      # | is a pipe
 
 Question: what does this do?
 
@@ -89,45 +93,44 @@ Question: what does this do?
 
 Answer: count the number of files with `s` in their name.
 
-Demonstrates principles of good programming practice:
+Good programming practice:
 
 * Modular components with well-defined interfaces.
-* High cohesion - degree to which elements of a component belong together.
-* Low coupling - degree to which a component depends on other components.
-* "little pieces loosely joined" together to create computational and data processing workflows.
-* `history` + `grep` = function to search for a command.
-* C functions and libraries, FORTRAN types, subroutines, functions and modules, Java packages, classes and methods, Python functions and classes.
+* High cohesion - elements belong together.
+* Low coupling - depends on other components.
+* "little pieces loosely joined" to create computational and data processing workflows.
+* `history` + `grep` = 'search-for-command' function.
+* Functions, methods, modules, classes, packages, libraries, scripts.
 
-Separate commands on same line:
+<p/>
 
     echo "Number of .txt files:" ; find . -name '*.txt' | wc -l  # ; runs each command separately
 
 `tee` and `script`
 ------------------
 
-    ls -l *.sh | tee log.txt  # Capture standard output mid-pipeline
+    ls -l *.sh | tee log.txt     # Capture standard output mid-pipeline
     cat log.txt
+
     history | tee raw.txt | grep "tar" | tee filtered.txt
     ls -l *.sh | tee log.txt
-    ls -l *.py | tee -a log.txt # Append
-
-[How tee works](http://en.wikipedia.org/wiki/Tee_\(command\)#mediaviewer/File:Tee.svg)
-
+    ls -l *.py | tee -a log.txt  # Append
     ls *.txt 2>&1 | tee log.txt
 
-    script
+How tee works[ SVG](http://en.wikipedia.org/wiki/Tee_\(command\)#mediaviewer/File:Tee.svg)
+
+    script  # Not GitBash
     ls -l
     CTRL-D
     cat typescript
 
 Provenance:
 
-* Create record of commands typed, input parameters, output file names.
+* Record of commands typed, input parameters, output file names for lab notebook.
 * Experiments when using command-line tools.
-* Trial-and-error when resolving problems when building software.
-* Send exact copies of commands and error messages in e-mails or bug reports.
-* Add to lab notebook.
-* Rework scripts into blogs or tutorials.
+* Trial-and-error-and-fix when building software.
+* Exact copies of commands and error messages for e-mails or bug reports.
+* Rework into blogs, tutorials, FAQs.
 
 Command history revisited
 -------------------------
@@ -138,9 +141,11 @@ Command history revisited
     CTRL-R
     Type letter(s). CTRL-R to go
     (reverse-i-search)`;
+
     fc -l N     # Display command 10 onwards
     fc -l M N   # Display commands 10 to 20
     fc -l ssh   # Display commands from last 'ssh' command
+
     history -c  # Clear history e.g. you accidently type your password
 
 Reusing not retyping, or up-arrowing through 10s of commands, saves time.
@@ -151,6 +156,7 @@ Reusing not retyping, or up-arrowing through 10s of commands, saves time.
     cat variables.sh
     ./variables.sh
     echo $EXAMPLE_DIR
+
     sh variables.sh
     echo $EXAMPLE_DIR
 
@@ -161,7 +167,7 @@ Answer: a new shell is spawned, commands are run, the shell is killed.
     source variables.sh  # Run the commands within the current shell
     echo $EXAMPLE_DIR
 
-May kill the current shell if one of the commands is `exit`.
+Kills the current shell if one of the commands is `exit`.
 
 Packaging
 ---------
@@ -170,11 +176,14 @@ Packaging
     cd tmp
     cp ../books/*.txt .
     tar -cvzf books.tar.gz *txt  # TAR Create Verbose, TAR File, gZip
+
     rm *.txt
     tar -xvf books.tar.gz        # eXtract ... all over user's current directory!
+
     cd ..
     cp -r books books-1.1
     tar -cvzf books.tar.gz books-1.1  # ZIP up contents within directory
+
     mkdir unpack-nice
     cd unpack-nice
     mv ../books-1.1.tar.gz .  
@@ -186,9 +195,7 @@ Security:
     ls -l books-1.1.tar.gz   # File size
     md5sum books-1.1.tar.gz  # MD5 checksum (hash that acts as fingerprint)
 
-Provenance:
-
-* Version number or date directory and bundle.
+Add version number or date to directory and package for provenance.
 
 Jobs
 ----
@@ -199,20 +206,23 @@ Jobs
     cat count1.out
     cat count1.out
     cat count1.out
-    jobs -l  # Current jobs + is current, - is previous
-    ps  # Processes across all shells
-    fg 2  # Bring job to foreground
-    CTRL-Z  # Suspend job - not on GitBash :-(
+    jobs -l                   # Current jobs + is current, - is previous
+    ps                        # Processes across all shells
+
+    fg 2                      # Bring job to foreground
+    CTRL-Z                    # Suspend job - not GitBash
     jobs -l
-    bg 2  # Restart job in background 
+
+    bg 2                      # Restart job in background 
     jobs -l
     fg 1 
     CTRL-C
     jobs -l
-    kill %2 # Kill job with given job number
+
+    kill %2                   # Kill job with given job number
     jobs -l
     ps -A
-    kill 3 # Kill process with given process number
+    kill 3                    # Kill process with given process number
     jobs -l
 
 Executables
@@ -223,19 +233,17 @@ Executables
     cd ..
     interactive.sh
     cd DIRECTORY
-    PATH=~:$PATH
+    PATH=~:$PATH  # Bash searches PATH for executables
     cd ..
     interactive.sh
 
-`type' is a BASH built-in command which describes commands:
-
-    type git
-    type ls # "is hashed" means it's cached so no need to re-search $PATH
+    type git # built-in command which describes commands
+    type ls # "is hashed" - cached so no need to re-search $PATH
     type python
     type interactive.sh
-    type -t python # Type e.g. "file"
-    type -t type # Type e.g. "builtin"
-    type -a python # All places in $PATH with this command
+    type -t python  # Type e.g. "file"
+    type -t type    # Type e.g. "builtin"
+    type -a python  # All places in $PATH with this command
 
 Wrong version of a compiler, interpreter, tool being used? Check the path.
 
@@ -253,13 +261,9 @@ Set up aliases, environment variables for user or applications and library paths
 
 Create new login or GitBash shell.
 
-Creation:
-
 * `.bashrc` is read when an interactive, non-login, shell is created
 * `.bash_profile` is also read when a login shell is created
 * Keep distinction in mind when running applications that spawn new shells e.g. `mpiexec.hydra`.
-
-Other shells have their own equivalents (e.g. `.profile`).
 
 Exit codes
 ----------
@@ -276,8 +280,8 @@ Clean up
     rm *.txt
     rm *.tmp
 
-Shell power
------------
+Little pieces loosely joined
+----------------------------
 
 Common words problem: 
 
@@ -295,8 +299,3 @@ Common words problem:
 
 * Bentley, Knuth, McIlroy (1986) Programming pearls: a literate program Communications of the ACM, 29(6), pp471-483, June 1986 [doi:10.1145/5948.315654](http://dx.doi.org/10.1145/5948.315654)
 * Dr. Drang (2011) [More shell, less egg](http://www.leancrew.com/all-this/2011/12/more-shell-less-egg/), 4 December 2011. 
-
-Questions
----------
-
-Any questions on anything shell-related?
